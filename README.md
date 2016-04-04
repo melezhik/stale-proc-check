@@ -45,7 +45,7 @@ Check process for given period of time. Default value is \`1 days', An examples 
 * 10 days
 * 2 weeks
 
-This parameter should complies with [DateTime::subtract method](https://metacpan.org/pod/DateTime#Math-Methods) format 
+This parameter should complies with [DateTime::subtract method](https://metacpan.org/pod/DateTime#Math-Methods) format.
 
 # AUTHOR
 
