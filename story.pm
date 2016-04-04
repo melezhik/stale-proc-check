@@ -10,7 +10,7 @@ Test::More::note("history: $history");
 
 my $cnt = 0;
 
-open(my $fh, '-|', "ps -eo pid,cmd,etime | grep $filter") or die $!;
+open(my $fh, '-|', "ps -eo pid,cmd,etime") or die $!;
 
 while (my $line = <$fh>) {
 
@@ -22,31 +22,48 @@ while (my $line = <$fh>) {
       my $cmd = $2;
       my $tm = $3;
 
-      if ($tm=~/(\d+)-(\d\d:\d\d:\d\d)/){
+      my ($ptime, $days, $h, $m, $s);
 
-        my $days = $1;
+      if ($tm=~/(\d+)-(\d\d:\d\d:\d\d)/) {
 
-        my ($h,$m,$s)= split ':', $2;
+        $days = $1;
 
-        #warn("$days -- $h,$m,$s");
+        ($h,$m,$s)= split ':', $2;
 
-        #my $ptime = DateTime->now()->add( days => -$days, hours => -$h, $minutes => -$m, seconds => -$s);
+        $ptime = DateTime->now->add( days => - $days, hours => - $h, minutes => - $m, seconds => - $s );
 
-        my $ptime = DateTime->now->add( days => - $days );
+      } elsif( $tm =~/(\d\d:\d\d:\d\d)/ ){
 
-        my $check_time = DateTime->now()->subtract( reverse ( split /\s+/, $history ) );
+        ($h,$m,$s)= split ':', $1;
 
-        if ( DateTime->compare( $ptime, $check_time ) == -1 ){
-            set_stdout('start_proc_data');
-            set_stdout("pid: $pid");
-            set_stdout("command: $cmd");
-            set_stdout("time: $ptime");
-            set_stdout('end_proc_data');
-            $cnt++;
-            #warn "ptime: $ptime check_time: $check_time";
-        }
+        $ptime = DateTime->now->add(  hours => - $h, minutes => - $m, seconds => - $s );
 
-    }
+      } elsif( $tm =~/(\d\d:\d\d)/ ){
+
+        ($m,$s)= split ':', $1;
+
+        $ptime = DateTime->now->add( minutes => - $m, seconds => - $s );
+
+      }else{
+
+        next;
+      }
+
+
+      my $check_time = DateTime->now()->subtract( reverse ( split /\s+/, $history ) );
+
+      # warn $ptime, ' --- ', $check_time;
+
+      if ( DateTime->compare( $ptime, $check_time  ) == -1 ){
+          set_stdout('start_proc_data');
+          set_stdout("pid: $pid");
+          set_stdout("command: $cmd");
+          set_stdout("time: $ptime");
+          set_stdout('end_proc_data');
+          $cnt++;
+          #warn "ptime: $ptime check_time: $check_time";
+      }
+
 
 }
 
