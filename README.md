@@ -35,7 +35,7 @@ ps utility should be installed
 
 ## filter
 
-Sets the pattern to filter up output from `ps uax` command - to have only desired processes 
+Sets pattern to filter desired processes
 
 ## history
 

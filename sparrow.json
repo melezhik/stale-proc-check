@@ -1,5 +1,5 @@
 {
-    "version": "0.0.0.1",
+    "version": "0.0.0.2",
     "name": "stale-proc-check",
     "engine": "generic", 
     "description" : "Find stale processes at your server",
