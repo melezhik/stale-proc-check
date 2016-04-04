@@ -2,6 +2,7 @@ use DateTime;
 use strict;
 
 my $filter = config()->{'stale-proc-check'}->{filter};
+my $filter_re = qr/$filter/;
 my $history = config()->{'stale-proc-check'}->{history} || '1 minutes';
 
 Test::More::note("filter: $filter");
@@ -12,6 +13,8 @@ my $cnt = 0;
 open(my $fh, '-|', "ps -eo pid,cmd,etime | grep $filter") or die $!;
 
 while (my $line = <$fh>) {
+
+      next unless $line=~/$filter_re/;
 
       $line=~/(\d+)\s+(.*)\s+(\S+)/ or next;
 
