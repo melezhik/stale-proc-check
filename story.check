@@ -1,0 +1,28 @@
+regexp: count: (\d+)
+code: our $CNT = capture()->[0];
+
+generator:        \
+my $l = [];       \
+if ( our $CNT > 0){  \
+
+  push @$l, (       \
+    'begin:' ,      \
+    'start_proc_data',    \
+    'pid',                \
+    'command',            \
+    'time',               \
+    'end_proc_data',      \
+    'end:'                \
+  );                      \
+}                         \
+
+$l
+
+code: note((scalar @{stream()})." stale processes found");
+
+code: for my $c ( @{stream()} ) { note join " ", @{$c}[1,2,3]};
+
+validator: [  our $CNT == 0, 'zero stale processes found' ];
+
+
+
