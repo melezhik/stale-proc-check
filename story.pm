@@ -36,7 +36,7 @@ while (my $line = <$fh>) {
 
         ($h,$m,$s)= split ':', $1;
 
-        $ptime = DateTime->now->add( hours => $h, minutes => - $m, seconds => - $s );
+        $ptime = DateTime->now->add( hours => -$h, minutes => - $m, seconds => - $s );
 
       } elsif( $tm =~/(\d\d:\d\d)/ ){
 
@@ -54,7 +54,7 @@ while (my $line = <$fh>) {
 
       if ( DateTime->compare( $ptime, $check_time  ) == -1 ){
 
-          my %delta = $check_time->subtract_datetime( $ptime )->deltas;
+          my %delta = DateTime->now()->subtract_datetime( $ptime )->deltas;
 
           my $dt_fmt;
 
