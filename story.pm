@@ -28,22 +28,27 @@ while (my $line = <$fh>) {
 
         my ($h,$m,$s)= split ':', $2;
 
-        #warn("$days -- $h,$m,$s");
-
-        #my $ptime = DateTime->now()->add( days => -$days, hours => -$h, $minutes => -$m, seconds => -$s);
-
         my $ptime = DateTime->now->add( days => - $days );
 
         my $check_time = DateTime->now()->subtract( reverse ( split /\s+/, $history ) );
 
         if ( DateTime->compare( $ptime, $check_time ) == -1 ){
+            my %delta = $check_time->subtract_datetime( $ptime )->deltas;
             set_stdout('start_proc_data');
             set_stdout("pid: $pid");
             set_stdout("command: $cmd");
             set_stdout("time: $ptime");
+            my $dt_fmt;
+            $dt_fmt.="months: $delta{months} "   if $delta{months};
+            $dt_fmt.="days: $delta{days} "       if $delta{days};
+            $dt_fmt.="minutes: $delta{minutes} " if $delta{minutes};
+            $dt_fmt.="seconds: $delta{seconds} " if $delta{seconds};
+            set_stdout(
+              "delta: $dt_fmt"
+            );
             set_stdout('end_proc_data');
             $cnt++;
-            #warn "ptime: $ptime check_time: $check_time";
+
         }
 
     }
