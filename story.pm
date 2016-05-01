@@ -28,7 +28,7 @@ while (my $line = <$fh>) {
 
         $days = $1;
 
-        ($h,$m,$s)= split ':', $2;
+        ($h,$m,$s) = split ':', $2;
 
         $ptime = DateTime->now->add( days => - $days, hours => - $h, minutes => - $m, seconds => - $s );
 
@@ -36,34 +36,44 @@ while (my $line = <$fh>) {
 
         ($h,$m,$s)= split ':', $1;
 
-        $ptime = DateTime->now->add(  hours => - $h, minutes => - $m, seconds => - $s );
+        $ptime = DateTime->now->add( hours => -$h, minutes => - $m, seconds => - $s );
 
       } elsif( $tm =~/(\d\d:\d\d)/ ){
 
-        ($m,$s)= split ':', $1;
+        ($m,$s) = split ':', $1;
 
         $ptime = DateTime->now->add( minutes => - $m, seconds => - $s );
 
       }else{
 
         next;
-      }
 
+      }
 
       my $check_time = DateTime->now()->subtract( reverse ( split /\s+/, $history ) );
 
-      # warn $ptime, ' --- ', $check_time;
-
       if ( DateTime->compare( $ptime, $check_time  ) == -1 ){
+
+          my %delta = DateTime->now()->subtract_datetime( $ptime )->deltas;
+
+          my $dt_fmt;
+
+          $dt_fmt.="months: $delta{months} "   if $delta{months};
+          $dt_fmt.="days: $delta{days} "       if $delta{days};
+          $dt_fmt.="minutes: $delta{minutes} " if $delta{minutes};
+          $dt_fmt.="seconds: $delta{seconds} " if $delta{seconds};
+
           set_stdout('start_proc_data');
           set_stdout("pid: $pid");
           set_stdout("command: $cmd");
           set_stdout("time: $ptime");
+          set_stdout(
+            "delta: $dt_fmt"
+          );
           set_stdout('end_proc_data');
           $cnt++;
           #warn "ptime: $ptime check_time: $check_time";
       }
-
 
 }
 
