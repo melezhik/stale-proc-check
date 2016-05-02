@@ -1,9 +1,9 @@
 use DateTime;
 use strict;
 
-my $filter = config()->{'stale-proc-check'}->{filter};
+my $filter = config()->{filter};
 my $filter_re = qr/$filter/;
-my $history = config()->{'stale-proc-check'}->{history} || '1 minutes';
+my $history = config()->{history} || '1 minutes';
 
 Test::More::note("filter: $filter");
 Test::More::note("history: $history");

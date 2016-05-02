@@ -22,14 +22,11 @@ ps utility should be installed
     $ sparrow check set system stale-ssh-sessions stale-proc-check
     $ export EDITOR=nano && sparrow check ini system stale-ssh-sessions
 
-      [stale-proc-check]
-      # lets find all ssh processes running since last week
-      filter = ssh
-      history = 1 weeks
-
+    # lets find all nginx processes running since last week
+    filter = nginx
+    history = 1 weeks
 
     $ sparrow check run system stale-ssh-sessions
-
 
 # Settings
 
