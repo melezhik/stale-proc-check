@@ -1,7 +1,6 @@
 {
-    "version": "0.2.0.0",
+    "version": "0.3.0.0",
     "name": "stale-proc-check",
-    "engine": "generic", 
     "description" : "Find stale processes at your server",
     "url": "https://github.com/melezhik/stale-proc-check.git"
 }
