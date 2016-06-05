@@ -16,19 +16,11 @@ ps utility should be installed
 
 # USAGE
 
-
-    $ sparrow project create system
-    $ sparrow check add system stale-ssh-sessions
-    $ sparrow check set system stale-ssh-sessions stale-proc-check
-    $ export EDITOR=nano && sparrow check ini system stale-ssh-sessions
-
     # lets find all nginx processes running since last week
-    filter = nginx
-    history = 1 weeks
 
-    $ sparrow check run system stale-ssh-sessions
+    $ sparrow plg run stale-proc-check --param filter=nginx --param history="'1 weeks'"
 
-# Settings
+# Plugin settings
 
 ## filter
 

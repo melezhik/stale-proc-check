@@ -3,7 +3,7 @@ use strict;
 
 my $filter = config()->{filter};
 my $filter_re = qr/$filter/;
-my $history = config()->{history} || '1 minutes';
+my $history = config()->{history}; # || '1 minutes';
 
 Test::More::note("filter: $filter");
 Test::More::note("history: $history");
@@ -16,7 +16,11 @@ while (my $line = <$fh>) {
 
       next unless $line=~/$filter_re/;
 
+      chomp $line;
+
       $line=~/(\d+)\s+(.*)\s+(\S+)/ or next;
+
+      set_stdout($line);
 
       my $pid = $1;
       my $cmd = $2;
@@ -63,16 +67,9 @@ while (my $line = <$fh>) {
           $dt_fmt.="minutes: $delta{minutes} " if $delta{minutes};
           $dt_fmt.="seconds: $delta{seconds} " if $delta{seconds};
 
-          set_stdout('start_proc_data');
-          set_stdout("pid: $pid");
-          set_stdout("command: $cmd");
-          set_stdout("time: $ptime");
-          set_stdout(
-            "delta: $dt_fmt"
-          );
-          set_stdout('end_proc_data');
+          set_stdout("delta: $dt_fmt");
+
           $cnt++;
-          #warn "ptime: $ptime check_time: $check_time";
       }
 
 }
