@@ -5,8 +5,8 @@ my $filter = config()->{filter};
 my $filter_re = qr/$filter/;
 my $history = config()->{history}; # || '1 minutes';
 
-Test::More::note("filter: $filter");
-Test::More::note("history: $history");
+set_stdout("filter: $filter");
+set_stdout("history: $history");
 
 my $cnt = 0;
 
